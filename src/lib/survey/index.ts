@@ -8,6 +8,10 @@ import { dynamoSurveyRepo } from "./repo.dynamo";
 export const surveyRepo: SurveyRepo =
   process.env.REPO_IMPL === "dynamo" ? dynamoSurveyRepo : mockSurveyRepo;
 
+// Survey orgs are keyed `org-*`; portal companies are `c-*`. Map by prefix
+// convention (c-cedartrust → org-cedartrust).
+export const companyToOrgId = (companyId: string) => companyId.replace(/^c-/, "org-");
+
 // re-export the types frontend will need for props/state
 export type {
   Organization,

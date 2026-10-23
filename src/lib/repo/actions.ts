@@ -101,14 +101,16 @@ export async function withdrawConfirmations(formData: FormData) {
   revalidatePath("/analytics");
 }
 
-// Self-registration for any role. Creates the entity (company/supplier) or the
-// singleton institute, then a 1:1 User account with a hashed password, then signs in.
+// Self-registration for company/supplier. Creates the entity, then a 1:1 User
+// account with a hashed password, then signs in. Institute (indigenomics) accounts
+// hold global authority and are provisioned by operators only, never self-registered.
 export async function registerAction(formData: FormData) {
   const role = String(formData.get("role") ?? "");
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const password = String(formData.get("password") ?? "");
 
+  if (role !== "company" && role !== "supplier") redirect("/register?error=role");
   if (!email || !email.includes("@") || password.length < 8) redirect("/register?error=weak");
   if ((role === "company" || role === "supplier") && !name) redirect("/register?error=name");
   // NOTE: check-then-create is not atomic — concurrent same-email registrations could race.
@@ -118,13 +120,6 @@ export async function registerAction(formData: FormData) {
   const passwordHash = await hashPassword(password);
   const createdAt = new Date().toISOString();
 
-  // NOTE: the institute is conceptually a singleton, but that invariant is not enforced —
-  // a second indigenomics registration with a fresh email is accepted (acceptable for the demo).
-  if (role === "indigenomics") {
-    await repo.createUser({ email, passwordHash, kind: "indigenomics", createdAt });
-    writeSession({ kind: "indigenomics", email });
-    redirect("/home");
-  }
   // NOTE: entity-then-account is not transactional — if createUser throws after registerCompany/
   // registerSupplier, an orphan party with no account remains (acceptable for the demo).
   if (role === "company") {

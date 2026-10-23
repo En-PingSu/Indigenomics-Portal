@@ -1,6 +1,6 @@
 import { repo } from "@/lib/repo";
 import { partyIdFrom } from "@/lib/auth";
-import { surveyRepo } from "@/lib/survey";
+import { surveyRepo, companyToOrgId } from "@/lib/survey";
 import { money, TierBadge, StatusBadge, FlowBadge, TagChip } from "@/components/ui";
 import type { Party } from "@/lib/repo/types";
 import { ReportLineForm } from "./ReportLineForm";
@@ -10,10 +10,9 @@ import { ContextForm } from "./ContextForm";
 
 export const dynamic = "force-dynamic";
 
-// The 41-question RAP Impact Survey is a separate data layer keyed by `org-*` ids;
-// portal companies are `c-*`. Map by prefix convention (c-cedartrust → org-cedartrust).
+// The 41-question RAP Impact Survey is a separate data layer keyed by `org-*` ids
+// (see companyToOrgId).
 const SURVEY_YEAR = "2025";
-const companyToOrgId = (companyId: string) => companyId.replace(/^c-/, "org-");
 
 export default async function ReportPage({
   searchParams,
