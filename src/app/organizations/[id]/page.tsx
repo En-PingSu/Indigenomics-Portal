@@ -16,6 +16,7 @@ import { InstituteNav } from "@/components/InstituteNav";
 import { CommitmentSearch } from "@/app/commitments/CommitmentSearch";
 import { FilterRow } from "@/components/FilterRow";
 import { labelFor } from "@/lib/taxonomy";
+import { requireSession } from "@/lib/auth";
 
 // $ formatting for confirmed procurement spend — matches the cad() convention
 // used elsewhere (e.g. cases/activation): whole-dollar CAD, no cents.
@@ -60,6 +61,7 @@ export default async function OrgScorecardPage({
   params: { id: string };
   searchParams: { type?: CommitmentType; year?: string; q?: string };
 }) {
+  requireSession(["indigenomics"]);
   const items = await commitmentsRepo.listCommitments();
   const currentYear = new Date().getFullYear();
   const card = orgScorecard(items, params.id, currentYear);

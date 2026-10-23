@@ -8,6 +8,7 @@ import { SESSION_COOKIE, SESSION_TTL_SECONDS, signSession, getSession, type Sess
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { assertNotLocked, clearFailures, recordFailure } from "@/lib/auth/rate-limit";
 import type { FlowType, FlowTag, VerificationSource } from "./types";
+import { normalizeWebsite } from "@/lib/url";
 
 function writeSession(session: Session) {
   const value = signSession(session, Math.floor(Date.now() / 1000));
@@ -173,7 +174,7 @@ export async function updateSupplierProfileAction(formData: FormData) {
   await repo.updateSupplierProfile(supplierId, {
     sector: String(formData.get("sector") ?? "").trim(),
     region: String(formData.get("region") ?? "").trim(),
-    website: String(formData.get("website") ?? "").trim(),
+    website: normalizeWebsite(String(formData.get("website") ?? "")), // http(s) only
     blurb: String(formData.get("blurb") ?? "").trim(),
     profilePublic: formData.get("profilePublic") === "true",
   });

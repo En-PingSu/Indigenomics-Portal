@@ -100,7 +100,7 @@ A live demo of the current build is deployed (in the sandbox account):
 - **Production demo:** https://d1hwn8hhp1ytc0.cloudfront.net
 - **Canadian-residency demo:** https://d20w6ctg8j4zg2.cloudfront.net
 
-You can sign in to explore. All demo accounts share the password **`demo-portal-2026`**:
+You can sign in to explore. Company and supplier demo accounts share the password **`demo-portal-2026`** (`institute@demo` gets its own at seed time; see the main README):
 
 - **Indigenomics staff view** (the review/extraction queue): `institute@demo`
 - **A company view** (their own RAP commitments): e.g. `atb-financial@demo` or `bc-hydro@demo`

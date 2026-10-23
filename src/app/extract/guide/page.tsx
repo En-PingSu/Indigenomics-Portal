@@ -5,6 +5,7 @@
 import Link from "next/link";
 import { InstituteNav } from "@/components/InstituteNav";
 import { PUBLISH_SUMMARY, PUBLISH_STEPS, PUBLISH_STORED_DETAIL, DATE_FIELD_NOTE } from "@/lib/rap/validation-display";
+import { requireSession } from "@/lib/auth";
 
 export const metadata = { title: "Reviewer guide · Extraction QA" };
 
@@ -79,6 +80,7 @@ function FieldTable({ rows }: { rows: [string, string][] }) {
 }
 
 export default function ReviewGuidePage() {
+  requireSession(["indigenomics"]);
   return (
     <div className="space-y-6">
       <InstituteNav active="/extract" />

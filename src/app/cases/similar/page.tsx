@@ -4,10 +4,12 @@ import type { Theme, CourtLevel } from "@/lib/cases";
 import { SimilarCaseCard } from "../ui";
 import { isAdviceSeeking } from "@/lib/cases/briefs/advice";
 import { COURT_LEVELS, courtLevelLabel, THEMES, themeLabel } from "@/lib/cases/labels";
+import { requireSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function SimilarPage({ searchParams }: { searchParams: Record<string, string | string[] | undefined> }) {
+  requireSession();
   const narrative = String(searchParams.s ?? "").trim();
   const themes = (Array.isArray(searchParams.theme) ? searchParams.theme : searchParams.theme ? [searchParams.theme] : []) as Theme[];
   const level = (typeof searchParams.level === "string" ? searchParams.level : "") as CourtLevel | "";

@@ -4,8 +4,15 @@
 // back to the filename-only mock path.
 import { NextResponse } from "next/server";
 import { isUploadConfigured, presignUpload } from "@/lib/rap/storage";
+import { getSession } from "@/lib/auth";
 
 export async function POST(req: Request) {
+  // /api/* skips the middleware, so check here: uploads come from a company's
+  // My RAP page or the institute's Extract page, both signed in.
+  const session = getSession();
+  if (session?.kind !== "company" && session?.kind !== "indigenomics") {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
   if (!isUploadConfigured()) {
     return NextResponse.json({ configured: false });
   }

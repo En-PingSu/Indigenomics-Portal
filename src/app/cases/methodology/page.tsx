@@ -3,8 +3,10 @@ import { casesRepo } from "@/lib/cases";
 import { StatCard, Bar } from "../ui";
 import { courtLevelLabel } from "@/lib/cases/labels";
 import { SCREENING, screenedOut } from "@/lib/cases/screening";
+import { requireSession } from "@/lib/auth";
 
 export default async function MethodologyPage() {
+  requireSession();
   const st = await casesRepo.getCorpusStats();
   const cov = st.coverage;
   const levels = Object.entries(st.byLevel);

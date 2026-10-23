@@ -1,6 +1,7 @@
 import { repo } from "@/lib/repo";
 import { money } from "@/components/ui";
 import { labelFor } from "@/lib/taxonomy";
+import { safeHttpUrl } from "@/lib/url";
 import { TIER_LABELS, TIER_STYLES } from "@/lib/repo/labels";
 
 export const dynamic = "force-dynamic";
@@ -18,6 +19,8 @@ export default async function ShowcasePage({ params }: { params: { supplierId: s
   }
 
   const flows = Object.entries(s.byFlow).filter(([, v]) => v.confirmed > 0);
+  // Supplier-entered; also guards values saved before http(s)-only validation
+  const website = safeHttpUrl(s.website);
 
   return (
     <div className="space-y-6">
@@ -43,10 +46,10 @@ export default async function ShowcasePage({ params }: { params: { supplierId: s
         {s.blurb && <p className="text-ink2 mt-2">{s.blurb}</p>}
         <div className="text-ink3 text-sm mt-1">
           {[labelFor("sector", s.sectorNorm ?? s.sector ?? ""), s.region].filter(Boolean).join(" · ")}
-          {s.website && (
+          {website && (
             <>
               {" · "}
-              <a href={s.website} target="_blank" rel="noreferrer" className="underline">website ↗</a>
+              <a href={website} target="_blank" rel="noopener noreferrer" className="underline">website ↗</a>
             </>
           )}
         </div>

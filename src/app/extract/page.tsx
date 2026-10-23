@@ -2,10 +2,12 @@ import { InstituteNav } from "@/components/InstituteNav";
 import { ExtractTabs } from "@/components/ExtractTabs";
 import { UploadForm } from "./UploadForm";
 import { ReviewPanel } from "./ReviewPanel";
+import { requireSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function ExtractPage({ searchParams }: { searchParams: { tab?: string } }) {
+  requireSession(["indigenomics"]);
   const tab = searchParams.tab === "review" ? "review" : "upload";
   return (
     <div className="space-y-6">
