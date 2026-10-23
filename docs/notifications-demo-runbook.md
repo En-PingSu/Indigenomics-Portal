@@ -40,8 +40,8 @@ delivered notification.
    Creates the `Notifications` table in ca and wires the button's `ses:SendEmail`
    permission. The weekly cron stays **prod-only** — it will NOT fire on ca.
 3. **Have an institute login ready.** The page is institute-only
-   (`kind === "indigenomics"`). Use the real institute account on ca or register
-   one — do NOT rely on `institute@demo` (not auto-seeded).
+   (`kind === "indigenomics"`). Use the real institute account on ca (institute accounts
+   can no longer be self-registered) — do NOT rely on `institute@demo` (not auto-seeded).
 
 ## On-camera flow (~30 sec)
 1. Sign in as the institute → the nav now shows a **Notifications** tab.

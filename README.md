@@ -96,7 +96,7 @@ Lands on **Confirm** (approve buyer records) · **Record** · **My profile** (ed
 >
 > **Note (local dev):** `npm run ddb:seed` creates the 10 suppliers, the 3 synthetic companies, and `institute@demo`. The full **103 company** logins are provisioned by the `seed-org-logins` step (run in the deployed demo). To test the whole company set, use the deployed URL or run that seed against DynamoDB Local.
 
-To create your own account instead, use `/register` (company, supplier, or Indigenomics; password ≥ 8 characters).
+To create your own account instead, use `/register` (company or supplier; password ≥ 8 characters). Institute (Indigenomics) accounts are operator-provisioned and cannot be self-registered.
 
 ---
 

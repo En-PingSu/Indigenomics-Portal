@@ -9,7 +9,7 @@ const ERRORS: Record<string, string> = {
   role: "Pick a role.",
 };
 
-// Public, top-level registration for any role (company / supplier / Indigenomics).
+// Public, top-level registration for company / supplier. Institute accounts are operator-provisioned.
 export default function RegisterPage({ searchParams }: { searchParams?: { error?: string | string[] } }) {
   const code = Array.isArray(searchParams?.error) ? searchParams?.error[0] : searchParams?.error;
   const error = code ? ERRORS[code] ?? "Registration failed." : null;
@@ -38,7 +38,6 @@ export default function RegisterPage({ searchParams }: { searchParams?: { error?
           >
             <option value="company">Company (a buyer reporting spend)</option>
             <option value="supplier">Indigenous supplier</option>
-            <option value="indigenomics">Indigenomics (the institute)</option>
           </select>
         </label>
 
