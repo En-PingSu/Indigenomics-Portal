@@ -74,9 +74,12 @@ export const confirmations: Confirmation[] = lines
   }));
 
 // --- demo auth accounts (synthetic-data only — see design §10) ---
-// Shared, obviously-fake password so the team can sign in as any seeded entity
-// at the showcase. NEVER seed these against a real-data environment.
+// Shared, obviously-fake password so the team can sign in as any seeded company
+// or supplier at the showcase. NEVER seed these against a real-data environment.
 export const DEMO_PASSWORD = "demo-portal-2026";
+// The institute account has global curator authority, so it never gets the shared
+// (published) password: the seeder uses INSTITUTE_DEMO_PASSWORD, or generates one.
+export const INSTITUTE_DEMO_EMAIL = "institute@demo";
 
 export const demoUsers: { email: string; kind: "company" | "supplier" | "indigenomics"; partyId?: string }[] = [
   ...parties.map((p) => ({
@@ -84,5 +87,5 @@ export const demoUsers: { email: string; kind: "company" | "supplier" | "indigen
     kind: p.role,
     partyId: p.id,
   })),
-  { email: "institute@demo", kind: "indigenomics" as const },
+  { email: INSTITUTE_DEMO_EMAIL, kind: "indigenomics" as const },
 ];

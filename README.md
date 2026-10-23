@@ -44,11 +44,13 @@ Then open the printed URL (usually <http://localhost:3000>).
 
 ## Demo accounts — sign in to test each of the 3 roles
 
-Login is real (email + password). **Every account shares the same password:**
+Login is real (email + password). **Company and supplier accounts share the same password:**
 
 ```
 Password:  demo-portal-2026
 ```
+
+The `institute@demo` account has curator access to everything, so it gets its own password at seed time: set `INSTITUTE_DEMO_PASSWORD` before `npm run ddb:seed`, or use the one the seeder prints.
 
 Pick any of the three role sections below. The email is always the entity's name, lowercased with spaces → hyphens, ending in `@demo`.
 

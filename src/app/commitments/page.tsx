@@ -10,6 +10,7 @@ import { CommitmentSearch } from "./CommitmentSearch";
 import { PageJump } from "./PageJump";
 import { FilterRow } from "@/components/FilterRow";
 import { labelFor } from "@/lib/taxonomy";
+import { requireSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -164,6 +165,7 @@ export default async function CommitmentsPage({
     rfilter?: string; rpage?: string; rsector?: string; rq?: string;
   };
 }) {
+  requireSession();
   const yearNum = searchParams.year ? Number(searchParams.year) : undefined;
   const filter = {
     sector: searchParams.sector,

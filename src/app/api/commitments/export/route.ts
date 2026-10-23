@@ -2,6 +2,7 @@
 // pull the data into a spreadsheet / report. Honors ?sector= and ?type=.
 import { commitmentsRepo } from "@/lib/commitments";
 import type { CommitmentType, Sector } from "@/lib/commitments";
+import { getSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,14 @@ function esc(v: unknown): string {
 }
 
 export async function GET(req: Request) {
+  // Same audience as the /commitments page it exports (any signed-in user);
+  // /api/* skips the middleware, so check the session here.
+  if (!getSession()) {
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
   const { searchParams } = new URL(req.url);
   const sector = (searchParams.get("sector") as Sector | null) ?? undefined;
   const type = (searchParams.get("type") as CommitmentType | null) ?? undefined;

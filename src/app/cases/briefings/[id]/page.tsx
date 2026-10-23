@@ -5,11 +5,13 @@ import { getBrief } from "@/lib/cases/briefs/repo";
 import type { LegalCase } from "@/lib/cases";
 import { isAdviceSeeking } from "@/lib/cases/briefs/advice";
 import { themeLabel } from "@/lib/cases/labels";
+import { requireSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 const STALE_MS = 5 * 60_000;
 
 export default async function BriefingPage({ params }: { params: { id: string } }) {
+  requireSession();
   const b = await getBrief(params.id);
   if (!b) notFound();
   const adviceBanner = isAdviceSeeking(b.question) ? (

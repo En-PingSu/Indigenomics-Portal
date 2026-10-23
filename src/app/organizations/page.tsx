@@ -10,6 +10,7 @@ import { CommitmentSearch } from "@/app/commitments/CommitmentSearch";
 import { PageJump } from "@/app/commitments/PageJump";
 import { FilterRow } from "@/components/FilterRow";
 import { labelFor } from "@/lib/taxonomy";
+import { requireSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function OrganizationsPage({
 }: {
   searchParams: { sector?: Sector; q?: string; page?: string; sort?: string; dir?: string; letter?: string };
 }) {
+  requireSession(["indigenomics"]);
   const items = await commitmentsRepo.listCommitments();
   const currentYear = new Date().getFullYear();
   const orgs = await rollupOrgsWithEvidence(items, currentYear);

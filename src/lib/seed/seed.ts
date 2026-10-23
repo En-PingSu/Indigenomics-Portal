@@ -8,7 +8,8 @@
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
 import { ddbDoc, TABLE } from "../dynamo/client";
 import { toConfItem, toLineItem, toPartyItem, toUserItem } from "../dynamo/single-table";
-import { confirmations, DEMO_PASSWORD, demoUsers, lines, parties, T } from "./fixtures";
+import { randomBytes } from "crypto";
+import { confirmations, DEMO_PASSWORD, demoUsers, INSTITUTE_DEMO_EMAIL, lines, parties, T } from "./fixtures";
 import { hashPassword } from "../auth/password";
 import type { User } from "../repo/types";
 
@@ -28,8 +29,19 @@ export async function seedAll(): Promise<{
   ];
 
   const hash = await hashPassword(DEMO_PASSWORD);
+  const institutePassword = process.env.INSTITUTE_DEMO_PASSWORD || randomBytes(12).toString("base64url");
+  if (!process.env.INSTITUTE_DEMO_PASSWORD) {
+    console.log(`[seed] ${INSTITUTE_DEMO_EMAIL} password (generated; set INSTITUTE_DEMO_PASSWORD to choose one): ${institutePassword}`);
+  }
+  const instituteHash = await hashPassword(institutePassword);
   const userItems = demoUsers.map((u) =>
-    toUserItem({ email: u.email, passwordHash: hash, kind: u.kind, partyId: u.partyId, createdAt: T } as User),
+    toUserItem({
+      email: u.email,
+      passwordHash: u.email === INSTITUTE_DEMO_EMAIL ? instituteHash : hash,
+      kind: u.kind,
+      partyId: u.partyId,
+      createdAt: T,
+    } as User),
   );
   items.push(...userItems);
 

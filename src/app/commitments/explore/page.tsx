@@ -2,10 +2,12 @@ import { InstituteNav } from "@/components/InstituteNav";
 import { RapIndexTabs } from "@/components/RapIndexTabs";
 import { getIndexFacts } from "@/lib/rap-index/facts-source";
 import { ExploreClient } from "./ExploreClient";
+import { requireSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function CommitmentsExplorePage() {
+  requireSession();
   const facts = await getIndexFacts();
   return (
     <div className="space-y-6">

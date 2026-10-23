@@ -1,8 +1,10 @@
 import { listScans } from "@/lib/cases/monitor/repo";
+import { requireSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic"; // reads live scan reports from DynamoDB
 
 export default async function MonitoringPage() {
+  requireSession();
   const scans = await listScans(20);
   return (
     <div className="mx-auto max-w-3xl">

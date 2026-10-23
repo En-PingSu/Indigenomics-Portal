@@ -6,6 +6,7 @@
 // ===========================================================================
 import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const SESSION_COOKIE = "portal_session";
 export const SESSION_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
@@ -85,4 +86,14 @@ export function getSession(): Session | null {
 // (the old ?as= override is gone — see design §2).
 export function partyIdFrom(): string | undefined {
   return getSession()?.partyId;
+}
+
+// Page guard. Middleware reads the cookie without verifying it (UX routing only),
+// so every non-public page must call this (or getSession) itself: no verified
+// session → /login; a session of the wrong kind → /home.
+export function requireSession(kinds?: SessionKind[]): Session {
+  const session = getSession();
+  if (!session) redirect("/login");
+  if (kinds && !kinds.includes(session.kind)) redirect("/home");
+  return session;
 }
