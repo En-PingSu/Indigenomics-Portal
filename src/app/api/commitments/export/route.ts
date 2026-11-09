@@ -20,8 +20,11 @@ const COLUMNS = [
 ] as const;
 
 // RFC-4180-ish escaping: quote fields containing comma, quote, or newline.
+// Text starting with = + - @ (or tab/CR) is run as a formula by spreadsheet
+// apps, so prefix it with an apostrophe; real numbers are left as they are.
 function esc(v: unknown): string {
-  const s = String(v ?? "");
+  const raw = String(v ?? "");
+  const s = typeof v !== "number" && /^[=+\-@\t\r]/.test(raw) ? `'${raw}` : raw;
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 

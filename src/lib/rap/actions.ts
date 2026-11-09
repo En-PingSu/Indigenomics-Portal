@@ -57,6 +57,9 @@ export async function uploadRapAction(formData: FormData) {
   const docId = uuid();
   let sourceS3Key: string;
   if (presignedKey) {
+    // The key is client-supplied: accept only the shape uploadKey() issues, so
+    // it cannot name another object in the bucket or an external URL.
+    if (!/^uploads\/[0-9a-f-]{36}\/[A-Za-z0-9._-]+$/.test(presignedKey)) return;
     sourceS3Key = presignedKey; // already in S3
   } else if (hasFile && isUploadConfigured()) {
     sourceS3Key = uploadKey(docId, fileName);

@@ -31,6 +31,10 @@ export async function seedAll(): Promise<{
   const hash = await hashPassword(DEMO_PASSWORD);
   const institutePassword = process.env.INSTITUTE_DEMO_PASSWORD || randomBytes(12).toString("base64url");
   if (!process.env.INSTITUTE_DEMO_PASSWORD) {
+    // CI logs of a public repository are world-readable.
+    if (process.env.CI) {
+      throw new Error("[seed] set INSTITUTE_DEMO_PASSWORD (a repository secret) before seeding from CI");
+    }
     console.log(`[seed] ${INSTITUTE_DEMO_EMAIL} password (generated; set INSTITUTE_DEMO_PASSWORD to choose one): ${institutePassword}`);
   }
   const instituteHash = await hashPassword(institutePassword);

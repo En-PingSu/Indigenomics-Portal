@@ -1,5 +1,5 @@
 import { repo } from "@/lib/repo";
-import { partyIdFrom } from "@/lib/auth";
+import { requireSession } from "@/lib/auth";
 import { surveyRepo, companyToOrgId } from "@/lib/survey";
 import { money, TierBadge, StatusBadge, FlowBadge, TagChip } from "@/components/ui";
 import type { Party } from "@/lib/repo/types";
@@ -19,7 +19,7 @@ export default async function ReportPage({
 }: {
   searchParams: { edit?: string };
 }) {
-  const companyId = partyIdFrom(); // identity from session only (?as= removed in real-login)
+  const companyId = requireSession(["company"]).partyId; // identity from session only (?as= removed in real-login)
   const edit = searchParams.edit;
   const companies = await repo.listParties("company");
 

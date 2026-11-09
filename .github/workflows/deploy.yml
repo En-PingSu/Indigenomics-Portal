@@ -54,4 +54,6 @@ jobs:
       # see scripts/seed-sst.ts and docs/deploy.md.
       - name: Seed production
         if: github.event_name == 'workflow_dispatch' && inputs.reseed
+        env:
+          INSTITUTE_DEMO_PASSWORD: ${{ secrets.INSTITUTE_DEMO_PASSWORD }}
         run: npx sst shell --stage production -- tsx scripts/seed-sst.ts

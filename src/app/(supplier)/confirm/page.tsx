@@ -1,12 +1,12 @@
 import { repo } from "@/lib/repo";
-import { partyIdFrom } from "@/lib/auth";
+import { requireSession } from "@/lib/auth";
 import { respondToLine } from "@/lib/repo/actions";
 import { money, TierBadge, FlowBadge, flowClaim, TagChip } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
 export default async function ConfirmPage() {
-  const supplierId = partyIdFrom();
+  const supplierId = requireSession(["supplier"]).partyId;
   const suppliers = await repo.listParties("supplier");
 
   if (!supplierId) {

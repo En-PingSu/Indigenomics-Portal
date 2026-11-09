@@ -131,7 +131,10 @@ export async function stageExtraction(input: {
       await publishAndConfirm(staged, scrubForAutoPublish(result.extracted), "system:auto");
       return { status: "published" };
     }
-    if (isClean(result)) {
+    // Same gate as the staff confirm actions (canPublish): without a resolved
+    // Business Number the org identity would come from the uploaded document's
+    // own text, so anyone could publish under another organisation's name.
+    if (isClean(result) && staged.businessNumber) {
       await publishAndConfirm(staged, result.extracted, "system:auto");
       return { status: "published" };
     }

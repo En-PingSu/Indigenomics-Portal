@@ -53,9 +53,14 @@ export async function respondToLine(formData: FormData) {
   if (session?.kind !== "supplier" || !session.partyId) return;
   const byPartyId = session.partyId; // actor is the logged-in supplier, not a client-supplied id
   const lineId = String(formData.get("lineId"));
-  const status = String(formData.get("status")) as "confirmed" | "disputed" | "corrected";
+  const statusRaw = String(formData.get("status"));
+  if (statusRaw !== "confirmed" && statusRaw !== "disputed" && statusRaw !== "corrected") return;
+  const status = statusRaw;
   const correctedRaw = formData.get("correctedAmount");
-  const correctedAmount = correctedRaw ? Number(correctedRaw) : undefined;
+  // A corrected amount feeds the public "verified" totals: it must be a real,
+  // positive number, and only a correction carries one.
+  const correctedAmount = status === "corrected" ? Number(correctedRaw) : undefined;
+  if (correctedAmount !== undefined && (!Number.isFinite(correctedAmount) || correctedAmount <= 0)) return;
 
   await repo.recordConfirmation({ lineId, status, correctedAmount, byPartyId });
 
